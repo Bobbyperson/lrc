@@ -6,7 +6,7 @@ fn main() {
     let mut games: usize;
     loop {
         println!("Please input the amount of players.");
-        player_count = get_input().trim().parse::<usize>().unwrap();
+        player_count = get_input().trim().parse::<usize>().unwrap_or(0);
         if player_count > 1 {
             break;
         } else {
@@ -15,7 +15,7 @@ fn main() {
     }
     loop {
         println!("Please input the amount of games to play.");
-        games = get_input().trim().parse::<usize>().unwrap();
+        games = get_input().trim().parse::<usize>().unwrap_or(0);
         if games > 1 {
             break;
         } else {
@@ -29,12 +29,12 @@ fn main() {
         let winner = play_game(&mut players);
         wins[winner] += 1;
     }
-    for i in 0..player_count {
+    for (i, _) in wins.iter().enumerate().take(player_count) {
         println!("Player {} won {} times. {:.2}%", i + 1, wins[i], (wins[i] as f64) * 100.0 / (games as f64));
     }
 }
 
-fn play_game(players: &mut Vec<i32>) -> usize {
+fn play_game(players: &mut [i32]) -> usize {
     let mut done: bool = false;
     while !done {
         let mut i: usize = 0;
@@ -85,7 +85,7 @@ fn play_game(players: &mut Vec<i32>) -> usize {
         }
     }
     println!("Error: No winner found.");
-    return 0;
+    0
 }
 
 fn roll_dice() -> u32 {
