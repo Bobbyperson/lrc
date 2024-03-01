@@ -1,24 +1,33 @@
 use std::io;
 use rand::{thread_rng, Rng};
+use std::env;
 
 fn main() {
     let mut player_count: usize;
     let mut games: usize;
-    loop {
-        println!("Please input the amount of players.");
-        player_count = get_input().trim().parse::<usize>().unwrap_or(0);
-        if player_count > 1 {
-            break;
-        } else {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() == 3 {
+        player_count = args[1].parse::<usize>().unwrap_or(0);
+        games = args[2].parse::<usize>().unwrap_or(0);
+        if player_count < 1 || games < 1 {
+            panic!("Invalid input!")
+        }
+    } else {
+        loop {
+            println!("Please input the amount of players.");
+            player_count = get_input().trim().parse::<usize>().unwrap_or(0);
+            if player_count > 1 {
+                break;
+            }
             println!("Invalid input! Please input a value greater than 1.")
         }
-    }
-    loop {
-        println!("Please input the amount of games to play.");
-        games = get_input().trim().parse::<usize>().unwrap_or(0);
-        if games > 1 {
-            break;
-        } else {
+        loop {
+            println!("Please input the amount of games to play.");
+            games = get_input().trim().parse::<usize>().unwrap_or(0);
+            if games > 1 {
+                break;
+            }
             println!("Invalid input! Please input a value greater than 1.")
         }
     }
@@ -37,10 +46,9 @@ fn main() {
 fn play_game(players: &mut [i32]) -> usize {
     let mut done: bool = false;
     while !done {
-        let mut i: usize = 0;
-        for player in 0..players.len() {
+        for (i, player) in (0..players.len()).enumerate() {
             let dice: i32 = players[player].min(3);
-            for _j in 0..dice {
+            for _ in 0..dice {
                 let roll: u32 = roll_dice();
                 if roll == 4 { // left
                     players[player] -= 1;
@@ -63,7 +71,6 @@ fn play_game(players: &mut [i32]) -> usize {
                     players[player] -= 1;
                 }
             }
-            i += 1;
             done = true;
             let mut playing: i32 = 0;
             for player in players.iter() {
@@ -79,7 +86,7 @@ fn play_game(players: &mut [i32]) -> usize {
             }
         }
     }
-    for player in 0..players.len() {
+    for (player, _) in players.iter().enumerate() {
         if players[player] > 0 {
             return player;
         }
