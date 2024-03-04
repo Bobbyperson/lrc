@@ -45,30 +45,30 @@ fn main() {
 
 fn play_game(players: &mut [i32]) -> usize {
     let mut done: bool = false;
+    let mut rng = thread_rng();
     while !done {
         for (i, player) in (0..players.len()).enumerate() {
             let dice: i32 = players[player].min(3);
             for _ in 0..dice {
-                let roll: u32 = roll_dice();
-                if roll == 4 { // left
-                    players[player] -= 1;
-                    if i == 0 {
-                        let last_player = players.len() - 1;
-                        players[last_player] += 1;
-                    } else {
-                        players[i - 1] += 1;
+                let roll: u32 = rng.gen_range(1..=6);
+                match roll {
+                    4 => {players[player] -= 1;
+                        if i == 0 {
+                            let last_player = players.len() - 1;
+                            players[last_player] += 1;
+                        } else {
+                            players[i - 1] += 1;
+                        }
                     }
-                }
-                if roll == 5 { // right
-                    players[player] -= 1;
-                    if i == players.len() - 1 {
-                        players[0] += 1;
-                    } else {
-                        players[i + 1] += 1;
+                    5 => {players[player] -= 1;
+                        if i == players.len() - 1 {
+                            players[0] += 1;
+                        } else {
+                            players[i + 1] += 1;
+                        }
                     }
-                }
-                if roll == 6 { // center
-                    players[player] -= 1;
+                    6 => {players[player] -= 1;}
+                    _ => {}
                 }
             }
             done = true;
@@ -91,13 +91,7 @@ fn play_game(players: &mut [i32]) -> usize {
             return player;
         }
     }
-    println!("Error: No winner found.");
-    0
-}
-
-fn roll_dice() -> u32 {
-    let mut rng = thread_rng();
-    rng.gen_range(1..7)
+    panic!("Error: No winner found.");
 }
 
 fn get_input() -> String {
