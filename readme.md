@@ -6,7 +6,7 @@ This is a rust program designed to simulate the luck based dice game [left right
 
 Ensure you have rust and git installed.
 
-1. `git clone https://github.com/Bobbyperson12/lrc`
+1. `git clone https://github.com/Bobbyperson/lrc`
 1. `cd lrc`
 1. `cargo build --release`
 1. `./target/release/lrc`
