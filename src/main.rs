@@ -1,5 +1,5 @@
 use std::io;
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 use std::env;
 
 fn main() {
@@ -45,12 +45,12 @@ fn main() {
 
 fn play_game(players: &mut [i32]) -> usize {
     let mut done: bool = false;
-    let mut rng = thread_rng();
+    let mut rng = rng();
     while !done {
         for (i, player) in (0..players.len()).enumerate() {
             let dice: i32 = players[player].min(3);
             for _ in 0..dice {
-                let roll: u32 = rng.gen_range(1..=6);
+                let roll: u32 = rng.random_range(1..=6);
                 match roll {
                     4 => {players[player] -= 1;
                         if i == 0 {
