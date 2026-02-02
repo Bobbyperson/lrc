@@ -1,6 +1,7 @@
-use std::io;
 use rand::{rng, Rng};
 use std::env;
+use std::io;
+use tqdm::tqdm;
 
 fn main() {
     let mut player_count: usize;
@@ -33,13 +34,18 @@ fn main() {
     }
     let mut wins = vec![0; player_count];
 
-    for _i in 0..games {
+    for _i in tqdm(0..games) {
         let mut players = vec![3; player_count];
         let winner = play_game(&mut players);
         wins[winner] += 1;
     }
     for (i, _) in wins.iter().enumerate().take(player_count) {
-        println!("Player {} won {} times. {:.2}%", i + 1, wins[i], (wins[i] as f64) * 100.0 / (games as f64));
+        println!(
+            "Player {} won {} times. {:.2}%",
+            i + 1,
+            wins[i],
+            (wins[i] as f64) * 100.0 / (games as f64)
+        );
     }
 }
 
@@ -52,7 +58,8 @@ fn play_game(players: &mut [i32]) -> usize {
             for _ in 0..dice {
                 let roll: u32 = rng.random_range(1..=6);
                 match roll {
-                    4 => {players[player] -= 1;
+                    4 => {
+                        players[player] -= 1;
                         if i == 0 {
                             let last_player = players.len() - 1;
                             players[last_player] += 1;
@@ -60,14 +67,17 @@ fn play_game(players: &mut [i32]) -> usize {
                             players[i - 1] += 1;
                         }
                     }
-                    5 => {players[player] -= 1;
+                    5 => {
+                        players[player] -= 1;
                         if i == players.len() - 1 {
                             players[0] += 1;
                         } else {
                             players[i + 1] += 1;
                         }
                     }
-                    6 => {players[player] -= 1;}
+                    6 => {
+                        players[player] -= 1;
+                    }
                     _ => {}
                 }
             }
