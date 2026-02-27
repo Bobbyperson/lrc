@@ -1,4 +1,4 @@
-use rand::{rng, Rng};
+use rand::{rng, RngExt};
 use std::env;
 use std::io;
 use tqdm::tqdm;
